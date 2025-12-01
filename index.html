@@ -20,7 +20,6 @@
             flex-direction: column;
         }
 
-        /* TOP HEADER */
         .header {
             background: linear-gradient(135deg, #4a6fa5 0%, #5c7db8 100%);
             color: white;
@@ -49,46 +48,15 @@
             letter-spacing: 2px;
         }
 
-        /* BLUE BANNER REMOVED - More space for dashboard and chat */
-
-        /* MAIN CONTENT AREA - SIDE BY SIDE (FULL HEIGHT) */
         .main-content {
             flex: 1;
             display: grid;
-            grid-template-columns: 1fr 2fr;  /* Agent left 33%, Dashboard right 67% */
+            grid-template-columns: 7fr 3fr;
             gap: 20px;
             padding: 20px;
             overflow: hidden;
-            height: calc(100vh - 150px); /* More space without banner */
         }
 
-        /* LEFT PANEL - BI DASHBOARD (GREEN) */
-        .dashboard-panel {
-            background: #4ade80;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .panel-header {
-            background: #22c55e;
-            color: white;
-            padding: 20px;
-            font-size: 28px;
-            font-weight: 700;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .panel-content {
-            flex: 1;
-            background: white;
-            overflow: hidden;
-        }
-
-        /* RIGHT PANEL - AGENT CHAT (ORANGE) */
         .agent-panel {
             background: #fb923c;
             border-radius: 12px;
@@ -105,10 +73,32 @@
             font-size: 28px;
             font-weight: 700;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* BOTTOM NAVIGATION BAR */
+        .dashboard-panel {
+            background: #4ade80;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            background: #22c55e;
+            color: white;
+            padding: 20px;
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .panel-content {
+            flex: 1;
+            background: white;
+            overflow: hidden;
+        }
+
         .bottom-nav {
             background: linear-gradient(135deg, #4a6fa5 0%, #5c7db8 100%);
             padding: 20px 40px;
@@ -139,164 +129,56 @@
 
         .nav-icon {
             font-size: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             width: 40px;
             height: 40px;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* IFRAME STYLING */
         iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
 
-        /* LOADING STATE */
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            padding: 40px;
-            text-align: center;
-        }
-
-        .loading.dashboard {
-            color: #16a34a;
-        }
-
-        .loading.agent {
-            color: #ea580c;
-        }
-
-        .spinner {
-            border: 6px solid rgba(0, 0, 0, 0.1);
-            border-top: 6px solid currentColor;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .loading-subtitle {
-            font-size: 16px;
-            opacity: 0.7;
-        }
-
-        /* RESPONSIVE */
         @media (max-width: 1200px) {
             .main-content {
                 grid-template-columns: 1fr;
                 grid-template-rows: 1fr 1fr;
             }
-
-            .header-title {
-                font-size: 24px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                padding: 15px 20px;
-            }
-
-            .header-title {
-                font-size: 18px;
-            }
-
-            .logo {
-                width: 40px;
-                height: 40px;
-                font-size: 24px;
-            }
-
-            .bottom-nav {
-                flex-direction: column;
-                gap: 10px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- TOP HEADER -->
     <div class="header">
         <div class="logo">📧</div>
         <div class="header-title">APEX - Agile Project Excellence</div>
     </div>
 
-    <!-- MAIN CONTENT - SIDE BY SIDE (FULL HEIGHT) -->
     <div class="main-content">
-        <!-- LEFT - AGENT CHAT (ORANGE - SMALLER) -->
-        <div class="agent-panel">
-            <div class="agent-header">Agent Chat</div>
-            <div class="panel-content">
-                <!-- REPLACE WITH YOUR COPILOT EMBED URL -->
-                <iframe 
-                    src="YOUR_COPILOT_EMBED_URL_HERE"
-                    frameborder="0">
-                </iframe>
-                
-                <!-- LOADING STATE (Remove after adding URL) -->
-                <!-- <div class="loading agent">
-                    <div class="spinner"></div>
-                    <div class="loading-title">🤖 APEX AI Assistant</div>
-                    <div class="loading-subtitle">Initializing chat...</div>
-                </div> -->
-            </div>
-        </div>
-
-        <!-- RIGHT - BI DASHBOARD (GREEN - BIGGER) -->
         <div class="dashboard-panel">
             <div class="panel-header">BI Dashboard</div>
             <div class="panel-content">
-                <!-- REPLACE WITH YOUR POWER BI EMBED URL -->
-                <iframe 
-                    src="YOUR_POWER_BI_EMBED_URL_HERE"
-                    frameborder="0" 
-                    allowFullScreen="true">
-                </iframe>
-                
-                <!-- LOADING STATE (Remove after adding URL) -->
-                <!-- <div class="loading dashboard">
-                    <div class="spinner"></div>
-                    <div class="loading-title">📊 Power BI Dashboard</div>
-                    <div class="loading-subtitle">Loading sprint analytics...</div>
-                </div> -->
+                <iframe src="YOUR_POWER_BI_EMBED_URL_HERE" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div class="agent-panel">
+            <div class="agent-header">Agent Chat</div>
+            <div class="panel-content">
+                <iframe src="YOUR_COPILOT_EMBED_URL_HERE"></iframe>
             </div>
         </div>
     </div>
 
-    <!-- BOTTOM NAVIGATION BAR -->
     <div class="bottom-nav">
-        <a href="YOUR_ANALYTICS_BOARD_URL" target="_blank" class="nav-link">
-            <div class="nav-icon">⬅️</div>
-            <span>Agile Analytics & Monitoring System</span>
-        </a>
-        <a href="YOUR_VISUAL_BOARD_URL" target="_blank" class="nav-link">
+        <a href="YOUR_VISUAL_BOARD_URL" target="_blank" class="nav-link" style="margin-left: auto;">
             <span>Visual Board</span>
             <div class="nav-icon">➡️</div>
         </a>
     </div>
-
-    <script>
-        console.log('APEX Dashboard loaded successfully!');
-    </script>
 </body>
 </html>
