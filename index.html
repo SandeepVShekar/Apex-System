@@ -31,7 +31,7 @@
         .header {
             background: linear-gradient(135deg, #4a6fa5 0%, #5c7db8 100%);
             color: white;
-            padding: 20px 40px;
+            padding: 10px 30px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -45,28 +45,28 @@
         }
 
         .logo {
-            width: 50px;
-            height: 50px;
+            width: 30px;
+            height: 30px;
             border: 3px solid white;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
+            font-size: 20px;
             background: rgba(255, 255, 255, 0.1);
         }
 
         .header-title {
-            font-size: 32px;
+            font-size: 22px;
             font-weight: 700;
             letter-spacing: 2px;
         }
 
         .refresh-indicator {
-            padding: 8px 16px;
+            padding: 6px 12px;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            font-size: 14px;
+            font-size: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -109,8 +109,8 @@
         .dashboard-header {
             background: #f97316;
             color: white;
-            padding: 20px;
-            font-size: 28px;
+            padding: 10px;
+            font-size: 20px;
             font-weight: 700;
             text-align: center;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -131,8 +131,8 @@
         .agent-header {
             background: #22c55e;
             color: white;
-            padding: 20px;
-            font-size: 28px;
+            padding: 10px;
+            font-size: 20px;
             font-weight: 700;
             text-align: center;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -147,7 +147,7 @@
 
         .bottom-nav {
             background: linear-gradient(135deg, #4a6fa5 0%, #5c7db8 100%);
-            padding: 20px 40px;
+            padding: 10px 30px;
             display: flex;
             align-items: center;
             justify-content: flex-end;
@@ -157,12 +157,12 @@
         .nav-link {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
             color: white;
             text-decoration: none;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 600;
-            padding: 12px 25px;
+            padding: 8px 20px;
             border-radius: 8px;
             transition: all 0.3s ease;
             background: rgba(255, 255, 255, 0.1);
@@ -174,9 +174,9 @@
         }
 
         .nav-icon {
-            font-size: 28px;
-            width: 40px;
-            height: 40px;
+            font-size: 20px;
+            width: 32px;
+            height: 32px;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 8px;
             display: flex;
@@ -259,21 +259,21 @@
                 grid-template-rows: 1fr 1fr;
             }
             .header-title {
-                font-size: 24px;
+                font-size: 18px;
             }
         }
 
         @media (max-width: 768px) {
             .header {
-                padding: 15px 20px;
+                padding: 8px 20px;
             }
             .header-title {
-                font-size: 18px;
+                font-size: 16px;
             }
             .logo {
-                width: 40px;
-                height: 40px;
-                font-size: 24px;
+                width: 25px;
+                height: 25px;
+                font-size: 18px;
             }
         }
     </style>
@@ -471,14 +471,14 @@
         console.log('⏱️  Check interval:', CONFIG.checkInterval / 1000, 'seconds');
         console.log('========================================');
         console.log('');
-        console.log('📝 SETUP INSTRUCTIONS:');
-        console.log('1. Add Power BI embed URL (line 218)');
-        console.log('2. Add Copilot embed URL (line 225)');
-        console.log('3. Add Visual Board URL (line 233)');
-        console.log('4. Set up timestamp file in Power Automate');
-        console.log('5. Update CONFIG.refreshSignalUrl (line 249)');
-        console.log('6. Set CONFIG.autoRefreshEnabled = true (line 253)');
-        console.log('7. Uncomment lines 350-351 to enable auto-refresh');
+        console.log('📝 NEXT STEPS:');
+        console.log('1. ✅ Power BI URL added');
+        console.log('2. ⏳ Add Copilot embed URL (line 314)');
+        console.log('3. ⏳ Add Visual Board URL (line 326)');
+        console.log('4. ⏳ Set up timestamp file in Power Automate');
+        console.log('5. ⏳ Update CONFIG.refreshSignalUrl (line 344)');
+        console.log('6. ⏳ Set CONFIG.autoRefreshEnabled = true (line 349)');
+        console.log('7. ⏳ Uncomment lines 458-459 to enable auto-refresh');
         console.log('');
         console.log('💡 TIP: Press Ctrl+R (Cmd+R on Mac) to manually refresh dashboard');
         console.log('========================================');
