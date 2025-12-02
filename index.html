@@ -26,8 +26,14 @@
             padding: 20px 40px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            justify-content: space-between;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         .logo {
@@ -48,6 +54,26 @@
             letter-spacing: 2px;
         }
 
+        .refresh-indicator {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .refresh-indicator.active {
+            background: rgba(34, 197, 94, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
         .main-content {
             flex: 1;
             display: grid;
@@ -57,25 +83,29 @@
             overflow: hidden;
         }
 
-        .agent-panel {
+        /* DASHBOARD PANEL - LEFT - ORANGE */
+        .dashboard-panel {
             background: #fb923c;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
-        .agent-header {
+        .dashboard-header {
             background: #f97316;
             color: white;
             padding: 20px;
             font-size: 28px;
             font-weight: 700;
             text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .dashboard-panel {
+        /* AGENT PANEL - RIGHT - GREEN */
+        .agent-panel {
             background: #4ade80;
             border-radius: 12px;
             overflow: hidden;
@@ -84,19 +114,21 @@
             flex-direction: column;
         }
 
-        .panel-header {
+        .agent-header {
             background: #22c55e;
             color: white;
             padding: 20px;
             font-size: 28px;
             font-weight: 700;
             text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .panel-content {
             flex: 1;
             background: white;
             overflow: hidden;
+            position: relative;
         }
 
         .bottom-nav {
@@ -104,7 +136,7 @@
             padding: 20px 40px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-end;
             box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
         }
 
@@ -144,41 +176,262 @@
             border: none;
         }
 
+        /* Refresh overlay for dashboard */
+        .refresh-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            flex-direction: column;
+        }
+
+        .refresh-overlay.active {
+            display: flex;
+        }
+
+        .spinner {
+            border: 6px solid #f3f4f6;
+            border-top: 6px solid #f97316;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .refresh-text {
+            color: #f97316;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
         @media (max-width: 1200px) {
             .main-content {
                 grid-template-columns: 1fr;
                 grid-template-rows: 1fr 1fr;
+            }
+            .header-title {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header-title {
+                font-size: 18px;
+            }
+            .logo {
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
             }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="logo">📧</div>
-        <div class="header-title">APEX - Agile Project Excellence</div>
+        <div class="header-left">
+            <div class="logo">🎯</div>
+            <div class="header-title">APEX - Agile Project Excellence</div>
+        </div>
+        <div class="refresh-indicator" id="refreshIndicator">
+            <span id="refreshStatus">🟢 Live</span>
+        </div>
     </div>
 
     <div class="main-content">
+        <!-- LEFT - DASHBOARD (ORANGE - 70%) -->
         <div class="dashboard-panel">
-            <div class="panel-header">BI Dashboard</div>
+            <div class="dashboard-header">📊 APEX Crash Visual</div>
             <div class="panel-content">
-                <iframe src="YOUR_POWER_BI_EMBED_URL_HERE" allowfullscreen></iframe>
+                <div class="refresh-overlay" id="refreshOverlay">
+                    <div class="spinner"></div>
+                    <p class="refresh-text">Updating dashboard...</p>
+                </div>
+                <iframe id="dashboardIframe" src="YOUR_POWER_BI_EMBED_URL_HERE" allowfullscreen></iframe>
             </div>
         </div>
 
+        <!-- RIGHT - AGENT (GREEN - 30%) -->
         <div class="agent-panel">
-            <div class="agent-header">Agent Chat</div>
+            <div class="agent-header">🤖 APEX Agent</div>
             <div class="panel-content">
-                <iframe src="YOUR_COPILOT_EMBED_URL_HERE"></iframe>
+                <iframe id="agentIframe" src="YOUR_COPILOT_EMBED_URL_HERE"></iframe>
             </div>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <a href="YOUR_VISUAL_BOARD_URL" target="_blank" class="nav-link" style="margin-left: auto;">
+        <a href="YOUR_VISUAL_BOARD_URL" target="_blank" class="nav-link">
             <span>Visual Board</span>
             <div class="nav-icon">➡️</div>
         </a>
     </div>
+
+    <script>
+        // ========================================
+        // CONFIGURATION
+        // ========================================
+        const CONFIG = {
+            // Check for updates every 5 seconds (very responsive!)
+            checkInterval: 5000,
+            
+            // URL to the timestamp file that Power Automate updates
+            // REPLACE THIS with your SharePoint file URL after creating it
+            refreshSignalUrl: 'YOUR_TIMESTAMP_FILE_URL_HERE',
+            
+            // Last known refresh timestamp
+            lastRefreshTime: null,
+            
+            // Enable/disable auto-refresh (set to true after setup)
+            autoRefreshEnabled: false
+        };
+
+        // ========================================
+        // CHECK FOR REFRESH SIGNAL
+        // ========================================
+        async function checkForRefresh() {
+            if (!CONFIG.autoRefreshEnabled) {
+                return; // Auto-refresh disabled until you set it up
+            }
+
+            try {
+                // Fetch the timestamp file (with cache-busting)
+                const response = await fetch(CONFIG.refreshSignalUrl + '?_=' + Date.now(), {
+                    cache: 'no-store',
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.text();
+                    const newTimestamp = data.trim();
+                    
+                    // If timestamp changed, refresh dashboard
+                    if (CONFIG.lastRefreshTime && CONFIG.lastRefreshTime !== newTimestamp) {
+                        console.log('✅ New data detected! Refreshing dashboard...');
+                        console.log('Previous:', CONFIG.lastRefreshTime);
+                        console.log('New:', newTimestamp);
+                        refreshDashboard();
+                    }
+                    
+                    CONFIG.lastRefreshTime = newTimestamp;
+                    updateRefreshIndicator('🟢 Live', false);
+                } else {
+                    console.log('⚠️ Could not reach timestamp file:', response.status);
+                    updateRefreshIndicator('🟡 Checking...', false);
+                }
+            } catch (error) {
+                console.log('⚠️ Error checking for updates:', error.message);
+                updateRefreshIndicator('🟡 Offline', false);
+            }
+        }
+
+        // ========================================
+        // REFRESH DASHBOARD ONLY
+        // ========================================
+        function refreshDashboard() {
+            const dashboardIframe = document.getElementById('dashboardIframe');
+            const overlay = document.getElementById('refreshOverlay');
+            
+            console.log('🔄 Refreshing dashboard iframe...');
+            
+            // Show loading overlay
+            overlay.classList.add('active');
+            updateRefreshIndicator('🔄 Updating...', true);
+            
+            // Refresh the iframe by adding a cache-busting parameter
+            const originalSrc = dashboardIframe.src.split('&_refresh=')[0].split('?_refresh=')[0];
+            dashboardIframe.src = originalSrc + (originalSrc.includes('?') ? '&' : '?') + '_refresh=' + Date.now();
+            
+            // Hide overlay after 3 seconds
+            setTimeout(() => {
+                overlay.classList.remove('active');
+                updateRefreshIndicator('✅ Updated', false);
+                console.log('✅ Dashboard refresh complete');
+                
+                // Reset to normal after 5 seconds
+                setTimeout(() => {
+                    updateRefreshIndicator('🟢 Live', false);
+                }, 5000);
+            }, 3000);
+        }
+
+        // ========================================
+        // UPDATE REFRESH INDICATOR
+        // ========================================
+        function updateRefreshIndicator(text, active) {
+            const indicator = document.getElementById('refreshIndicator');
+            const status = document.getElementById('refreshStatus');
+            status.textContent = text;
+            
+            if (active) {
+                indicator.classList.add('active');
+            } else {
+                indicator.classList.remove('active');
+            }
+        }
+
+        // ========================================
+        // MANUAL REFRESH (Ctrl+R / Cmd+R)
+        // ========================================
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+R or Cmd+R to manually refresh dashboard
+            if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+                e.preventDefault();
+                console.log('🔄 Manual refresh triggered');
+                refreshDashboard();
+            }
+        });
+
+        // ========================================
+        // START AUTO-REFRESH CHECKER
+        // ========================================
+        // UNCOMMENT THE LINES BELOW AFTER YOU:
+        // 1. Add the timestamp file creation in Power Automate
+        // 2. Update CONFIG.refreshSignalUrl with your file URL
+        // 3. Set CONFIG.autoRefreshEnabled = true
+        
+        // setInterval(checkForRefresh, CONFIG.checkInterval);
+        // console.log('✅ Auto-refresh enabled - checking every', CONFIG.checkInterval / 1000, 'seconds');
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        console.log('========================================');
+        console.log('🎯 APEX Dashboard Loaded Successfully!');
+        console.log('========================================');
+        console.log('📊 Dashboard: APEX Crash Visual');
+        console.log('🤖 Agent: APEX Agent');
+        console.log('🔄 Auto-refresh:', CONFIG.autoRefreshEnabled ? 'ENABLED' : 'DISABLED');
+        console.log('⏱️  Check interval:', CONFIG.checkInterval / 1000, 'seconds');
+        console.log('========================================');
+        console.log('');
+        console.log('📝 SETUP INSTRUCTIONS:');
+        console.log('1. Add Power BI embed URL (line 218)');
+        console.log('2. Add Copilot embed URL (line 225)');
+        console.log('3. Add Visual Board URL (line 233)');
+        console.log('4. Set up timestamp file in Power Automate');
+        console.log('5. Update CONFIG.refreshSignalUrl (line 249)');
+        console.log('6. Set CONFIG.autoRefreshEnabled = true (line 253)');
+        console.log('7. Uncomment lines 350-351 to enable auto-refresh');
+        console.log('');
+        console.log('💡 TIP: Press Ctrl+R (Cmd+R on Mac) to manually refresh dashboard');
+        console.log('========================================');
+    </script>
 </body>
 </html>
