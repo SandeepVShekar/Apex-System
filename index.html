@@ -93,7 +93,6 @@
             max-height: 100%;
         }
 
-        /* DASHBOARD PANEL - LEFT - ORANGE */
         .dashboard-panel {
             background: #fb923c;
             border-radius: 12px;
@@ -116,7 +115,6 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* AGENT PANEL - RIGHT - GREEN */
         .agent-panel {
             background: #4ade80;
             border-radius: 12px;
@@ -192,14 +190,12 @@
             display: block;
         }
 
-        /* Force no scrollbars on iframe content */
         iframe::-webkit-scrollbar {
             display: none;
             width: 0;
             height: 0;
         }
 
-        /* Hide scrollbars globally */
         body::-webkit-scrollbar,
         html::-webkit-scrollbar {
             display: none;
@@ -213,7 +209,6 @@
             scrollbar-width: none;
         }
 
-        /* Refresh overlay for dashboard */
         .refresh-overlay {
             position: absolute;
             top: 0;
@@ -290,7 +285,6 @@
     </div>
 
     <div class="main-content">
-        <!-- LEFT - DASHBOARD (ORANGE - 70%) -->
         <div class="dashboard-panel">
             <div class="dashboard-header">📊 APEX Crash Visual</div>
             <div class="panel-content">
@@ -303,13 +297,11 @@
                     src="https://app.powerbi.com/view?r=eyJrIjoiZjUwM2RjMmYtZmJkZi00ZGNhLTg4ZGItYzE5YmRmNjE3ZGVmIiwidCI6IjdjNGNkMDlhLTYzMmQtNGEyMS05NjhkLTIzZjgyMDg2ODIyOSIsImMiOjZ9" 
                     frameborder="0" 
                     allowfullscreen="true"
-                    scrolling="no"
-                    style="width: 100%; height: 100%; border: none; display: block; overflow: hidden;">
+                    scrolling="no">
                 </iframe>
             </div>
         </div>
 
-        <!-- RIGHT - AGENT (GREEN - 30%) -->
         <div class="agent-panel">
             <div class="agent-header">🤖 APEX Agent</div>
             <div class="panel-content">
@@ -317,8 +309,7 @@
                     id="agentIframe" 
                     src="YOUR_COPILOT_EMBED_URL_HERE"
                     frameborder="0"
-                    scrolling="no"
-                    style="width: 100%; height: 100%; border: none; display: block; overflow: hidden;">
+                    scrolling="no">
                 </iframe>
             </div>
         </div>
@@ -332,46 +323,26 @@
     </div>
 
     <script>
-        // ========================================
-        // CONFIGURATION - FULLY ACTIVATED ✅
-        // ========================================
         const CONFIG = {
-            // Check for updates every 2 seconds
             checkInterval: 2000,
-            
-            // Your OneDrive timestamp file URL (corrected format)
-            refreshSignalUrl: 'https://vidyashekarsandeepgmail.sharepoint.com/:t:/g/EUtS2gGDBEpHkysW02tRhM8BYIbmrVX_dSGG6e8nkfkt0w',
-            
-            // Last known refresh timestamp
+            refreshSignalUrl: 'https://gist.githubusercontent.com/SandeepVShekar/8b0394f3372a8182e258cee58b418a85/raw/apex-refresh-signal.txt',
             lastRefreshTime: null,
-            
-            // Auto-refresh is NOW ENABLED ✅
             autoRefreshEnabled: true
         };
 
-        // ========================================
-        // CHECK FOR REFRESH SIGNAL
-        // ========================================
         async function checkForRefresh() {
-            if (!CONFIG.autoRefreshEnabled) {
-                return;
-            }
+            if (!CONFIG.autoRefreshEnabled) return;
 
             try {
-                // Fetch the timestamp file using download parameter with cache-busting
-                const response = await fetch(CONFIG.refreshSignalUrl + '?download=1&_=' + Date.now(), {
-                    mode: 'cors',
+                const response = await fetch(CONFIG.refreshSignalUrl + '?_=' + Date.now(), {
                     cache: 'no-store',
-                    headers: {
-                        'Cache-Control': 'no-cache'
-                    }
+                    headers: { 'Cache-Control': 'no-cache' }
                 });
                 
                 if (response.ok) {
                     const data = await response.text();
                     const newTimestamp = data.trim();
                     
-                    // If timestamp changed, refresh dashboard
                     if (CONFIG.lastRefreshTime && CONFIG.lastRefreshTime !== newTimestamp) {
                         console.log('✅ New data detected! Refreshing dashboard...');
                         console.log('Previous:', CONFIG.lastRefreshTime);
@@ -386,128 +357,46 @@
                     updateRefreshIndicator('🟡 Checking...', false);
                 }
             } catch (error) {
-                console.log('⚠️ Error checking for updates:', error.message);
+                console.log('⚠️ Error:', error.message);
                 updateRefreshIndicator('🟡 Offline', false);
             }
         }
 
-        // ========================================
-        // REFRESH DASHBOARD ONLY
-        // ========================================
         function refreshDashboard() {
             const dashboardIframe = document.getElementById('dashboardIframe');
             const overlay = document.getElementById('refreshOverlay');
             
-            console.log('🔄 Refreshing dashboard iframe...');
-            
-            // Show loading overlay
             overlay.classList.add('active');
             updateRefreshIndicator('🔄 Updating...', true);
             
-            // Refresh the iframe by adding a cache-busting parameter
             const originalSrc = dashboardIframe.src.split('&_refresh=')[0].split('?_refresh=')[0];
             dashboardIframe.src = originalSrc + (originalSrc.includes('?') ? '&' : '?') + '_refresh=' + Date.now();
             
-            // Hide overlay after 3 seconds
             setTimeout(() => {
                 overlay.classList.remove('active');
                 updateRefreshIndicator('✅ Updated', false);
-                console.log('✅ Dashboard refresh complete');
-                
-                // Reset to normal after 5 seconds
-                setTimeout(() => {
-                    updateRefreshIndicator('🟢 Live', false);
-                }, 5000);
+                setTimeout(() => updateRefreshIndicator('🟢 Live', false), 5000);
             }, 3000);
         }
 
-        // ========================================
-        // UPDATE REFRESH INDICATOR
-        // ========================================
         function updateRefreshIndicator(text, active) {
-            const indicator = document.getElementById('refreshIndicator');
-            const status = document.getElementById('refreshStatus');
-            status.textContent = text;
-            
-            if (active) {
-                indicator.classList.add('active');
-            } else {
-                indicator.classList.remove('active');
-            }
+            document.getElementById('refreshStatus').textContent = text;
+            document.getElementById('refreshIndicator').classList.toggle('active', active);
         }
 
-        // ========================================
-        // MANUAL REFRESH (Ctrl+R / Cmd+R)
-        // ========================================
         document.addEventListener('keydown', function(e) {
-            // Ctrl+R or Cmd+R to manually refresh dashboard
             if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
                 e.preventDefault();
-                console.log('🔄 Manual refresh triggered');
                 refreshDashboard();
             }
         });
 
-        // ========================================
-        // START AUTO-REFRESH CHECKER - NOW ACTIVE ✅
-        // ========================================
         setInterval(checkForRefresh, CONFIG.checkInterval);
-        console.log('✅ Auto-refresh ENABLED - checking every', CONFIG.checkInterval / 1000, 'seconds');
-
-        // ========================================
-        // INITIALIZATION
-        // ========================================
         console.log('========================================');
-        console.log('🎯 APEX Dashboard Loaded Successfully!');
-        console.log('========================================');
-        console.log('📊 Dashboard: APEX Crash Visual');
-        console.log('🤖 Agent: APEX Agent (needs URL)');
-        console.log('🔄 Auto-refresh: ✅ ENABLED');
-        console.log('⏱️  Check interval: 2 seconds');
-        console.log('📁 Signal file:', CONFIG.refreshSignalUrl);
-        console.log('========================================');
-        console.log('');
-        console.log('📝 STATUS:');
-        console.log('✅ Power BI URL configured');
-        console.log('✅ Auto-refresh ACTIVE (checks every 2s)');
-        console.log('✅ Timestamp file configured');
-        console.log('⏳ Copilot embed URL needed (line 314)');
-        console.log('⏳ Visual Board URL needed (line 326)');
-        console.log('');
-        console.log('💡 TIPS:');
-        console.log('- Press Ctrl+R (Cmd+R on Mac) to manually refresh dashboard');
-        console.log('- Open browser console (F12) to see refresh activity');
-        console.log('- Trigger "Refresh BI Dashboard" in bot to test auto-refresh');
+        console.log('🎯 APEX Dashboard with GitHub Gist!');
+        console.log('✅ Auto-refresh ENABLED - Checking every 2 seconds');
+        console.log('📁 Gist URL:', CONFIG.refreshSignalUrl);
         console.log('========================================');
     </script>
 </body>
 </html>
-```
-
----
-
-## Key Changes Made:
-
-1. **✅ Removed `&e=GEUPrF`** from the URL (line 344)
-2. **✅ Added `?download=1`** parameter in the fetch call (line 365)
-3. **✅ Added `mode: 'cors'`** to handle cross-origin requests (line 366)
-4. **✅ Fixed URL concatenation** - now uses `?download=1&_=` instead of `&_=`
-
----
-
-## Test It:
-
-1. **Save as `apex-dashboard.html`**
-2. **Open in browser**
-3. **Press F12** to open console
-4. **Look for:** `✅ Auto-refresh ENABLED - checking every 2 seconds`
-5. **Trigger BI Refresh** from your bot
-6. **Watch console** for: `✅ New data detected! Refreshing dashboard...`
-
----
-
-## If It Still Shows "Offline":
-
-Test the URL directly by opening this in a new browser tab:
-```
-https://vidyashekarsandeepgmail.sharepoint.com/:t:/g/EUtS2gGDBEpHkysW02tRhM8BYIbmrVX_dSGG6e8nkfkt0w?download=1
