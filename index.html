@@ -333,21 +333,20 @@
 
     <script>
         // ========================================
-        // CONFIGURATION
+        // CONFIGURATION - FULLY ACTIVATED ✅
         // ========================================
         const CONFIG = {
-            // Check for updates every 5 seconds (very responsive!)
-            checkInterval: 5000,
+            // Check for updates every 2 seconds (CHANGED FROM 5!)
+            checkInterval: 2000,
             
-            // URL to the timestamp file that Power Automate updates
-            // REPLACE THIS with your SharePoint file URL after creating it
-            refreshSignalUrl: 'YOUR_TIMESTAMP_FILE_URL_HERE',
+            // Your OneDrive timestamp file URL
+            refreshSignalUrl: 'https://vidyashekarsandeepgmail.sharepoint.com/:t:/g/EUtS2gGDBEpHkysW02tRhM8BYIbmrVX_dSGG6e8nkfkt0w?e=GEUPrF&download=1',
             
             // Last known refresh timestamp
             lastRefreshTime: null,
             
-            // Enable/disable auto-refresh (set to true after setup)
-            autoRefreshEnabled: false
+            // Auto-refresh is NOW ENABLED ✅
+            autoRefreshEnabled: true
         };
 
         // ========================================
@@ -355,12 +354,12 @@
         // ========================================
         async function checkForRefresh() {
             if (!CONFIG.autoRefreshEnabled) {
-                return; // Auto-refresh disabled until you set it up
+                return;
             }
 
             try {
                 // Fetch the timestamp file (with cache-busting)
-                const response = await fetch(CONFIG.refreshSignalUrl + '?_=' + Date.now(), {
+                const response = await fetch(CONFIG.refreshSignalUrl + '&_=' + Date.now(), {
                     cache: 'no-store',
                     headers: {
                         'Cache-Control': 'no-cache'
@@ -449,15 +448,10 @@
         });
 
         // ========================================
-        // START AUTO-REFRESH CHECKER
+        // START AUTO-REFRESH CHECKER - NOW ACTIVE ✅
         // ========================================
-        // UNCOMMENT THE LINES BELOW AFTER YOU:
-        // 1. Add the timestamp file creation in Power Automate
-        // 2. Update CONFIG.refreshSignalUrl with your file URL
-        // 3. Set CONFIG.autoRefreshEnabled = true
-        
-        // setInterval(checkForRefresh, CONFIG.checkInterval);
-        // console.log('✅ Auto-refresh enabled - checking every', CONFIG.checkInterval / 1000, 'seconds');
+        setInterval(checkForRefresh, CONFIG.checkInterval);
+        console.log('✅ Auto-refresh ENABLED - checking every', CONFIG.checkInterval / 1000, 'seconds');
 
         // ========================================
         // INITIALIZATION
@@ -466,21 +460,23 @@
         console.log('🎯 APEX Dashboard Loaded Successfully!');
         console.log('========================================');
         console.log('📊 Dashboard: APEX Crash Visual');
-        console.log('🤖 Agent: APEX Agent');
-        console.log('🔄 Auto-refresh:', CONFIG.autoRefreshEnabled ? 'ENABLED' : 'DISABLED');
-        console.log('⏱️  Check interval:', CONFIG.checkInterval / 1000, 'seconds');
+        console.log('🤖 Agent: APEX Agent (needs URL)');
+        console.log('🔄 Auto-refresh: ✅ ENABLED');
+        console.log('⏱️  Check interval: 2 seconds');
+        console.log('📁 Signal file:', CONFIG.refreshSignalUrl);
         console.log('========================================');
         console.log('');
-        console.log('📝 NEXT STEPS:');
-        console.log('1. ✅ Power BI URL added');
-        console.log('2. ⏳ Add Copilot embed URL (line 314)');
-        console.log('3. ⏳ Add Visual Board URL (line 326)');
-        console.log('4. ⏳ Set up timestamp file in Power Automate');
-        console.log('5. ⏳ Update CONFIG.refreshSignalUrl (line 344)');
-        console.log('6. ⏳ Set CONFIG.autoRefreshEnabled = true (line 349)');
-        console.log('7. ⏳ Uncomment lines 458-459 to enable auto-refresh');
+        console.log('📝 STATUS:');
+        console.log('✅ Power BI URL configured');
+        console.log('✅ Auto-refresh ACTIVE (checks every 2s)');
+        console.log('✅ Timestamp file configured');
+        console.log('⏳ Copilot embed URL needed (line 314)');
+        console.log('⏳ Visual Board URL needed (line 326)');
         console.log('');
-        console.log('💡 TIP: Press Ctrl+R (Cmd+R on Mac) to manually refresh dashboard');
+        console.log('💡 TIPS:');
+        console.log('- Press Ctrl+R (Cmd+R on Mac) to manually refresh dashboard');
+        console.log('- Open browser console (F12) to see refresh activity');
+        console.log('- Trigger "Refresh BI Dashboard" in bot to test auto-refresh');
         console.log('========================================');
     </script>
 </body>
