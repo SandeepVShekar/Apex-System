@@ -336,11 +336,11 @@
         // CONFIGURATION - FULLY ACTIVATED ✅
         // ========================================
         const CONFIG = {
-            // Check for updates every 2 seconds (CHANGED FROM 5!)
+            // Check for updates every 2 seconds
             checkInterval: 2000,
             
-            // Your OneDrive timestamp file URL
-            refreshSignalUrl: 'https://vidyashekarsandeepgmail.sharepoint.com/:t:/g/EUtS2gGDBEpHkysW02tRhM8BYIbmrVX_dSGG6e8nkfkt0w?e=GEUPrF&download=1',
+            // Your OneDrive timestamp file URL (corrected format)
+            refreshSignalUrl: 'https://vidyashekarsandeepgmail.sharepoint.com/:t:/g/EUtS2gGDBEpHkysW02tRhM8BYIbmrVX_dSGG6e8nkfkt0w',
             
             // Last known refresh timestamp
             lastRefreshTime: null,
@@ -358,8 +358,9 @@
             }
 
             try {
-                // Fetch the timestamp file (with cache-busting)
-                const response = await fetch(CONFIG.refreshSignalUrl + '&_=' + Date.now(), {
+                // Fetch the timestamp file using download parameter with cache-busting
+                const response = await fetch(CONFIG.refreshSignalUrl + '?download=1&_=' + Date.now(), {
+                    mode: 'cors',
                     cache: 'no-store',
                     headers: {
                         'Cache-Control': 'no-cache'
@@ -481,3 +482,32 @@
     </script>
 </body>
 </html>
+```
+
+---
+
+## Key Changes Made:
+
+1. **✅ Removed `&e=GEUPrF`** from the URL (line 344)
+2. **✅ Added `?download=1`** parameter in the fetch call (line 365)
+3. **✅ Added `mode: 'cors'`** to handle cross-origin requests (line 366)
+4. **✅ Fixed URL concatenation** - now uses `?download=1&_=` instead of `&_=`
+
+---
+
+## Test It:
+
+1. **Save as `apex-dashboard.html`**
+2. **Open in browser**
+3. **Press F12** to open console
+4. **Look for:** `✅ Auto-refresh ENABLED - checking every 2 seconds`
+5. **Trigger BI Refresh** from your bot
+6. **Watch console** for: `✅ New data detected! Refreshing dashboard...`
+
+---
+
+## If It Still Shows "Offline":
+
+Test the URL directly by opening this in a new browser tab:
+```
+https://vidyashekarsandeepgmail.sharepoint.com/:t:/g/EUtS2gGDBEpHkysW02tRhM8BYIbmrVX_dSGG6e8nkfkt0w?download=1
